@@ -23,7 +23,7 @@ body {
 /* Header */
 .header {
   background: #542E91;
-  padding: 16px 0;
+  padding: 20px 0;
   border-bottom: 4px solid #FDDC06;
 }
 
@@ -31,22 +31,27 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .logo {
-  height: 40px;
+  height: 80px;
 }
 
 .strapline {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #fff;
-  text-align: center;
+  white-space: nowrap;
 }
 
 .easter-decoration {
-  font-size: 24px;
+  font-size: 28px;
 }
 
 /* Banner */
@@ -327,6 +332,23 @@ body {
 
   .header-content {
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .logo-group {
+    flex-direction: column;
     gap: 8px;
+  }
+
+  .logo {
+    height: 60px;
+  }
+
+  .strapline {
+    font-size: 14px;
+  }
+
+  .easter-decoration {
+    font-size: 24px;
   }
 }

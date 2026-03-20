@@ -15,11 +15,13 @@
   <header class="header">
     <div class="container">
       <div class="header-content">
-        <img src="https://d17s4kc6349e5h.cloudfront.net/holidayextras/assets/images/logos/HolidayExtras-logo-horizontal-transparent.svg"
-             alt="Holiday Extras" class="logo" height="50">
+        <div class="logo-group">
+          <img src="https://d17s4kc6349e5h.cloudfront.net/holidayextras/assets/images/logos/HolidayExtras-logo-horizontal-transparent.svg"
+               alt="Holiday Extras" class="logo" height="80">
+          <p class="strapline">Less hassle. More holiday.</p>
+        </div>
         <div class="easter-decoration">🐰 🌷 🥚</div>
       </div>
-      <p class="strapline">Less hassle. More holiday.</p>
     </div>
   </header>
 
@@ -66,6 +68,11 @@
             </div>
 
             <div class="form-field">
+              <label class="hx-search-forms_label" for="outDate">Drop-off date</label>
+              <input type="date" id="outDate" class="hx-search-forms_text-input" required>
+            </div>
+
+            <div class="form-field">
               <label class="hx-search-forms_label" for="destinationSelect">Flying to (optional)</label>
               <select id="destinationSelect" class="hx-search-forms_select">
                 <option value="">Select destination...</option>
@@ -79,11 +86,6 @@
                 <option value="">Select flight...</option>
               </select>
               <div class="flight-loading" id="flightsLoading" style="display: none;">Loading...</div>
-            </div>
-
-            <div class="form-field">
-              <label class="hx-search-forms_label" for="outDate">Drop-off date</label>
-              <input type="date" id="outDate" class="hx-search-forms_text-input" required>
             </div>
 
             <div class="form-field">
