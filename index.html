@@ -7,7 +7,7 @@
   <title>Airport Parking</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -15,9 +15,11 @@
   <header class="header">
     <div class="container">
       <div class="header-content">
-        <h1 class="site-title" id="siteTitle">Airport Parking</h1>
+        <img src="https://d17s4kc6349e5h.cloudfront.net/holidayextras/assets/images/logos/HolidayExtras-logo-horizontal-transparent.svg"
+             alt="Holiday Extras" class="logo" height="40">
         <div class="easter-decoration">🐰 🌷 🥚</div>
       </div>
+      <p class="strapline">Less hassle. More holiday.</p>
     </div>
   </header>
 
@@ -41,6 +43,44 @@
 
         <form id="searchForm" class="search-form">
           <div class="hx-search-forms">
+            <div class="form-field" id="airportSelectField">
+              <label class="hx-search-forms_label" for="airportSelect">Airport</label>
+              <select id="airportSelect" class="hx-search-forms_select" required>
+                <option value="">Select airport</option>
+                <option value="LHR">London Heathrow</option>
+                <option value="LGW">London Gatwick</option>
+                <option value="MAN">Manchester</option>
+                <option value="STN">London Stansted</option>
+                <option value="LTN">London Luton</option>
+                <option value="BHX">Birmingham</option>
+                <option value="EDI">Edinburgh</option>
+                <option value="BRS">Bristol</option>
+                <option value="NCL">Newcastle</option>
+                <option value="LBA">Leeds Bradford</option>
+                <option value="EMA">East Midlands</option>
+                <option value="LPL">Liverpool</option>
+                <option value="GLA">Glasgow</option>
+                <option value="EXT">Exeter</option>
+                <option value="LCY">London City</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="hx-search-forms_label" for="destinationSelect">Flying to (optional)</label>
+              <select id="destinationSelect" class="hx-search-forms_select">
+                <option value="">Select destination...</option>
+              </select>
+              <div class="flight-loading" id="destinationsLoading" style="display: none;">Loading...</div>
+            </div>
+
+            <div class="form-field" id="flightSelectField" style="display: none;">
+              <label class="hx-search-forms_label" for="flightSelect">Select your flight (optional)</label>
+              <select id="flightSelect" class="hx-search-forms_select">
+                <option value="">Select flight...</option>
+              </select>
+              <div class="flight-loading" id="flightsLoading" style="display: none;">Loading...</div>
+            </div>
+
             <div class="form-field">
               <label class="hx-search-forms_label" for="outDate">Drop-off date</label>
               <input type="date" id="outDate" class="hx-search-forms_text-input" required>
@@ -92,28 +132,6 @@
                 <option value="20%3A00">20:00</option>
               </select>
             </div>
-
-            <div class="form-field" id="airportSelectField">
-              <label class="hx-search-forms_label" for="airportSelect">Airport</label>
-              <select id="airportSelect" class="hx-search-forms_select" required>
-                <option value="">Select airport</option>
-                <option value="LHR">London Heathrow</option>
-                <option value="LGW">London Gatwick</option>
-                <option value="MAN">Manchester</option>
-                <option value="STN">London Stansted</option>
-                <option value="LTN">London Luton</option>
-                <option value="BHX">Birmingham</option>
-                <option value="EDI">Edinburgh</option>
-                <option value="BRS">Bristol</option>
-                <option value="NCL">Newcastle</option>
-                <option value="LBA">Leeds Bradford</option>
-                <option value="EMA">East Midlands</option>
-                <option value="LPL">Liverpool</option>
-                <option value="GLA">Glasgow</option>
-                <option value="EXT">Exeter</option>
-                <option value="LCY">London City</option>
-              </select>
-            </div>
           </div>
 
           <input type="hidden" id="flight" name="flight" value="default">
@@ -122,26 +140,6 @@
             🐰 Search parking
           </button>
         </form>
-
-        <div class="flight-lookup" id="flightLookup">
-          <div class="flight-header easter-header">
-            <h3 class="flight-title">Add your flight</h3>
-            <p class="flight-subtitle">Optional - helps us find the perfect parking time</p>
-          </div>
-
-          <div class="flight-picker">
-            <label class="hx-search-forms_label" for="destinationSelect">Where are you flying to?</label>
-            <select id="destinationSelect" class="hx-search-forms_select">
-              <option value="">Select destination...</option>
-            </select>
-            <div class="flight-loading" id="destinationsLoading">Loading destinations...</div>
-          </div>
-
-          <div class="flight-list" id="flightListContainer" style="display: none;">
-            <div class="flight-loading" id="flightsLoading">Loading flights...</div>
-            <div id="flightList" class="flight-results"></div>
-          </div>
-        </div>
       </section>
 
       <section class="usp-section">
@@ -176,7 +174,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p class="footer-text">&copy; 2026 Airport Parking. Happy Easter! 🐰🥚</p>
+      <p class="footer-text">&copy; 2026 Holiday Extras. Happy Easter! 🐰🥚</p>
     </div>
   </footer>
 </body>

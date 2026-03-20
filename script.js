@@ -1,4 +1,4 @@
-// LGP Easter-Themed Parking Page with Flight Lookup
+// Holiday Extras Easter-Themed Parking Page with Integrated Flight Lookup
 
 const FLIGHT_API = "https://flight.dock-yard.io";
 
@@ -24,7 +24,6 @@ function defaultInFromOut(outDateStr) {
 }
 
 let inDateManuallyChanged = false;
-let selectedFlight = null;
 
 // Resolve airport and update page titles
 function resolveAirport() {
@@ -36,8 +35,7 @@ function resolveAirport() {
     document.getElementById("airportSelectField").style.display = "none";
     const airportName = AIRPORT_NAMES[locationParam];
 
-    document.title = `${airportName} Parking - Easter Special`;
-    document.getElementById("siteTitle").textContent = `${airportName} Parking`;
+    document.title = `${airportName} Parking - Easter Special | Holiday Extras`;
     document.getElementById("bannerHeadline").textContent = `Hop into savings at ${airportName} this Easter!`;
     document.getElementById("searchTitle").textContent = `Search ${airportName} parking`;
 
@@ -45,7 +43,7 @@ function resolveAirport() {
   } else {
     // No valid Location param - show airport dropdown
     document.getElementById("airportSelectField").style.display = "block";
-    document.title = "Airport Parking - Easter Special";
+    document.title = "Airport Parking - Easter Special | Holiday Extras";
     return null;
   }
 }
@@ -57,6 +55,7 @@ async function fetchDestinations(depart, departDate) {
 
   loading.style.display = "block";
   select.innerHTML = '<option value="">Select destination...</option>';
+  select.disabled = true;
 
   try {
     const response = await fetch(
@@ -74,28 +73,33 @@ async function fetchDestinations(depart, departDate) {
       destinations.forEach(dest => {
         const option = document.createElement("option");
         option.value = dest.airports.join(",");
-        option.textContent = `${dest.city}, ${dest.country} (${dest.count} flights)`;
+        option.textContent = `${dest.city}, ${dest.country}`;
+        option.dataset.airports = dest.airports.join(",");
         select.appendChild(option);
       });
+      select.disabled = false;
     } else {
       select.innerHTML = '<option value="">No destinations available</option>';
+      select.disabled = true;
     }
   } catch (error) {
     console.error("Error fetching destinations:", error);
     loading.style.display = "none";
     select.innerHTML = '<option value="">Error loading destinations</option>';
+    select.disabled = true;
   }
 }
 
-// Fetch flights for selected destination
+// Fetch flights for selected destination and populate dropdown
 async function fetchFlights(depart, departDate, destination) {
-  const container = document.getElementById("flightListContainer");
   const loading = document.getElementById("flightsLoading");
-  const list = document.getElementById("flightList");
+  const select = document.getElementById("flightSelect");
+  const field = document.getElementById("flightSelectField");
 
-  container.style.display = "block";
+  field.style.display = "block";
   loading.style.display = "block";
-  list.innerHTML = "";
+  select.innerHTML = '<option value="">Select flight...</option>';
+  select.disabled = true;
 
   try {
     const response = await fetch(
@@ -111,44 +115,27 @@ async function fetchFlights(depart, departDate, destination) {
 
     if (flights && flights.length > 0) {
       flights.forEach(f => {
-        const row = document.createElement("div");
-        row.className = "flight-row";
-
         const code = (f.flight && f.flight.code) || "";
         const depTime = (f.departure && f.departure.time) || "";
         const arrTime = (f.arrival && f.arrival.time) || "";
-        const depIata = (f.departure && f.departure.airport_iata) || "";
-        const arrIata = (f.arrival && f.arrival.airport_iata) || "";
         const stops = (f.flight && f.flight.connectingFlights && f.flight.connectingFlights.amount) || 0;
         const stopsText = stops === 0 ? "Direct" : `${stops} stop${stops > 1 ? 's' : ''}`;
 
-        row.innerHTML = `
-          <div class="flight-code">${code}</div>
-          <div class="flight-time">${depTime}</div>
-          <div class="flight-route">${depIata} → ${arrIata}</div>
-          <div class="flight-time">${arrTime}</div>
-          <div class="flight-stops">${stopsText}</div>
-        `;
-
-        row.addEventListener("click", () => {
-          // Deselect previous
-          document.querySelectorAll(".flight-row").forEach(r => r.classList.remove("selected"));
-
-          // Select this one
-          row.classList.add("selected");
-          selectedFlight = code;
-          document.getElementById("flight").value = code;
-        });
-
-        list.appendChild(row);
+        const option = document.createElement("option");
+        option.value = code;
+        option.textContent = `${code} - ${depTime} (${stopsText})`;
+        select.appendChild(option);
       });
+      select.disabled = false;
     } else {
-      list.innerHTML = '<div class="flight-loading">No flights found for this destination</div>';
+      select.innerHTML = '<option value="">No flights found</option>';
+      select.disabled = true;
     }
   } catch (error) {
     console.error("Error fetching flights:", error);
     loading.style.display = "none";
-    list.innerHTML = '<div class="flight-loading">Error loading flights</div>';
+    select.innerHTML = '<option value="">Error loading flights</option>';
+    select.disabled = true;
   }
 }
 
@@ -172,6 +159,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Re-fetch destinations when date changes
     const depart = departFromUrl || document.getElementById("airportSelect").value;
     if (depart) {
+      document.getElementById("flightSelectField").style.display = "none";
+      document.getElementById("destinationSelect").value = "";
       fetchDestinations(depart, this.value);
     }
   });
@@ -186,6 +175,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const depart = this.value;
     const departDate = outDateInput.value;
 
+    // Reset flight selections
+    document.getElementById("flightSelectField").style.display = "none";
+    document.getElementById("destinationSelect").value = "";
+    document.getElementById("flightSelect").value = "";
+
     if (depart && departDate) {
       fetchDestinations(depart, departDate);
     }
@@ -196,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
   destinationSelect.addEventListener("change", function() {
     const destination = this.value;
     if (!destination) {
-      document.getElementById("flightListContainer").style.display = "none";
+      document.getElementById("flightSelectField").style.display = "none";
       return;
     }
 
@@ -206,6 +200,12 @@ document.addEventListener("DOMContentLoaded", function() {
     if (depart && departDate) {
       fetchFlights(depart, departDate, destination);
     }
+  });
+
+  // Flight select change handler
+  const flightSelect = document.getElementById("flightSelect");
+  flightSelect.addEventListener("change", function() {
+    document.getElementById("flight").value = this.value || "default";
   });
 
   // Load destinations on page load if airport is set
@@ -230,14 +230,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const agent = urlParams.get("agent") || "WY992";
-    const flight = selectedFlight || "default";
+    const flight = flightSelect.value || "default";
     const adcode = urlParams.get("adcode") || "";
     const promotionCode = urlParams.get("promotionCode") || "";
 
-    // Domain resolution (LGP swaps www -> app)
+    // Domain resolution (HX stays on www)
     const host = window.location.host;
     const isLocal = host.startsWith("127") || host.includes("github.io");
-    const basedomain = isLocal ? "www.holidayextras.com" : host.replace("www", "app");
+    const basedomain = isLocal ? "www.holidayextras.com" : host;
 
     // Build search URL
     const searchUrl = `https://${basedomain}/static/?selectProduct=cp&#/categories?agent=${agent}&ppts=&customer_ref=&lang=en&adults=2&depart=${depart}&terminal=&arrive=&flight=${flight}&in=${inDate}&out=${outDate}&park_from=${outTime}&park_to=${inTime}&filter_meetandgreet=&filter_parkandride=&children=0&infants=0&redirectReferal=carpark&from_categories=true&adcode=${adcode}&promotionCode=${promotionCode}`;
