@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Airport Parking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <h1 class="site-title" id="siteTitle">Airport Parking</h1>
+        <div class="easter-decoration">🐰 🌷 🥚</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner">
+    <img class="banner-img" src="assets/easter-banner.jpg" alt="Easter bunny with suitcase">
+    <div class="banner-overlay">
+      <div class="banner-text">
+        <span class="banner-badge">Easter Special</span>
+        <h2 class="banner-headline" id="bannerHeadline">Hop into savings this Easter!</h2>
+      </div>
+    </div>
+  </div>
+
+  <main class="main">
+    <div class="container">
+      <section class="search-section">
+        <div class="section-header easter-header">
+          <h2 class="section-title" id="searchTitle">Search airport parking</h2>
+          <p class="section-subtitle">Find the egg-cellent deals on parking</p>
+        </div>
+
+        <form id="searchForm" class="search-form">
+          <div class="hx-search-forms">
+            <div class="form-field">
+              <label class="hx-search-forms_label" for="outDate">Drop-off date</label>
+              <input type="date" id="outDate" class="hx-search-forms_text-input" required>
+            </div>
+
+            <div class="form-field">
+              <label class="hx-search-forms_label" for="outTime">Drop-off time</label>
+              <select id="outTime" class="hx-search-forms_select" required>
+                <option value="06%3A00">06:00</option>
+                <option value="07%3A00">07:00</option>
+                <option value="08%3A00">08:00</option>
+                <option value="09%3A00">09:00</option>
+                <option value="10%3A00">10:00</option>
+                <option value="11%3A00">11:00</option>
+                <option value="12%3A00">12:00</option>
+                <option value="13%3A00">13:00</option>
+                <option value="14%3A00">14:00</option>
+                <option value="15%3A00">15:00</option>
+                <option value="16%3A00">16:00</option>
+                <option value="17%3A00">17:00</option>
+                <option value="18%3A00">18:00</option>
+                <option value="19%3A00">19:00</option>
+                <option value="20%3A00">20:00</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="hx-search-forms_label" for="inDate">Collection date</label>
+              <input type="date" id="inDate" class="hx-search-forms_text-input" required>
+            </div>
+
+            <div class="form-field">
+              <label class="hx-search-forms_label" for="inTime">Collection time</label>
+              <select id="inTime" class="hx-search-forms_select" required>
+                <option value="06%3A00">06:00</option>
+                <option value="07%3A00">07:00</option>
+                <option value="08%3A00">08:00</option>
+                <option value="09%3A00">09:00</option>
+                <option value="10%3A00">10:00</option>
+                <option value="11%3A00">11:00</option>
+                <option value="12%3A00" selected>12:00</option>
+                <option value="13%3A00">13:00</option>
+                <option value="14%3A00">14:00</option>
+                <option value="15%3A00">15:00</option>
+                <option value="16%3A00">16:00</option>
+                <option value="17%3A00">17:00</option>
+                <option value="18%3A00">18:00</option>
+                <option value="19%3A00">19:00</option>
+                <option value="20%3A00">20:00</option>
+              </select>
+            </div>
+
+            <div class="form-field" id="airportSelectField">
+              <label class="hx-search-forms_label" for="airportSelect">Airport</label>
+              <select id="airportSelect" class="hx-search-forms_select" required>
+                <option value="">Select airport</option>
+                <option value="LHR">London Heathrow</option>
+                <option value="LGW">London Gatwick</option>
+                <option value="MAN">Manchester</option>
+                <option value="STN">London Stansted</option>
+                <option value="LTN">London Luton</option>
+                <option value="BHX">Birmingham</option>
+                <option value="EDI">Edinburgh</option>
+                <option value="BRS">Bristol</option>
+                <option value="NCL">Newcastle</option>
+                <option value="LBA">Leeds Bradford</option>
+                <option value="EMA">East Midlands</option>
+                <option value="LPL">Liverpool</option>
+                <option value="GLA">Glasgow</option>
+                <option value="EXT">Exeter</option>
+                <option value="LCY">London City</option>
+              </select>
+            </div>
+          </div>
+
+          <input type="hidden" id="flight" name="flight" value="default">
+
+          <button type="submit" class="hx-search-forms_button easter-button">
+            🐰 Search parking
+          </button>
+        </form>
+
+        <div class="flight-lookup" id="flightLookup">
+          <div class="flight-header easter-header">
+            <h3 class="flight-title">Add your flight</h3>
+            <p class="flight-subtitle">Optional - helps us find the perfect parking time</p>
+          </div>
+
+          <div class="flight-picker">
+            <label class="hx-search-forms_label" for="destinationSelect">Where are you flying to?</label>
+            <select id="destinationSelect" class="hx-search-forms_select">
+              <option value="">Select destination...</option>
+            </select>
+            <div class="flight-loading" id="destinationsLoading">Loading destinations...</div>
+          </div>
+
+          <div class="flight-list" id="flightListContainer" style="display: none;">
+            <div class="flight-loading" id="flightsLoading">Loading flights...</div>
+            <div id="flightList" class="flight-results"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="usp-section">
+        <div class="usp-grid">
+          <div class="usp-card easter-card">
+            <div class="usp-icon">🥚</div>
+            <h3 class="usp-title">Hunt for savings</h3>
+            <p class="usp-text">Save up to 60% on airport parking - no egg-stravagant prices here!</p>
+          </div>
+
+          <div class="usp-card easter-card">
+            <div class="usp-icon">🐣</div>
+            <h3 class="usp-title">Fresh new deals</h3>
+            <p class="usp-text">Compare car parks, lounges, and hotels from top providers</p>
+          </div>
+
+          <div class="usp-card easter-card">
+            <div class="usp-icon">🌷</div>
+            <h3 class="usp-title">Spring into action</h3>
+            <p class="usp-text">Book now, pay later - flexible cancellation on most products</p>
+          </div>
+
+          <div class="usp-card easter-card">
+            <div class="usp-icon">🐰</div>
+            <h3 class="usp-title">Quick as a bunny</h3>
+            <p class="usp-text">Instant booking confirmation - hop straight to your holiday</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">&copy; 2026 Airport Parking. Happy Easter! 🐰🥚</p>
+    </div>
+  </footer>
+</body>
+</html>
